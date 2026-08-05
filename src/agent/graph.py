@@ -118,14 +118,27 @@ def run_agent(message: str, session_id: str) -> str:
     history.append(HumanMessage(content=message))
 
     for iteration in range(MAX_TOOL_ITERATIONS):
-        try:
-            response = llm.invoke(history)
-        except Exception as e:
-            logger.warning(f"[{session_id}] LLM call failed (iter {iteration}): {e}")
+        response = None
+        for retry in range(3):
+            try:
+                response = llm.invoke(history)
+                break
+            except Exception as e:
+                err_str = str(e).lower()
+                if "429" in err_str or "rate_limit" in err_str:
+                    import time
+                    logger.warning(f"[{session_id}] 429 rate limit hit, retrying in 3s (attempt {retry+1}/3)...")
+                    time.sleep(3)
+                else:
+                    logger.error(f"[{session_id}] LLM call failed (iter {iteration}): {e}")
+                    break
+
+        if not response:
             return (
                 "I'm experiencing a brief interruption. "
                 "Could you please repeat your message? I'm ready to help."
             )
+
 
         # Empty content AND no tool calls → graceful retry message
         if not response.content and not getattr(response, "tool_calls", None):
