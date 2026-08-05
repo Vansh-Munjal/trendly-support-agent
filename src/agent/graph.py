@@ -118,10 +118,6 @@ def run_agent(message: str, session_id: str) -> str:
     history.append(HumanMessage(content=message))
 
     for iteration in range(MAX_TOOL_ITERATIONS):
-        import time
-        if iteration > 0:
-            time.sleep(1)
-
         response = None
         for retry in range(3):
             try:
@@ -130,11 +126,13 @@ def run_agent(message: str, session_id: str) -> str:
             except Exception as e:
                 err_str = str(e).lower()
                 if "429" in err_str or "rate_limit" in err_str:
-                    logger.warning(f"[{session_id}] 429 rate limit hit, retrying in 2s (attempt {retry+1}/3)...")
-                    time.sleep(2)
+                    import time
+                    logger.warning(f"[{session_id}] 429 rate limit hit, retrying in 1s (attempt {retry+1}/3)...")
+                    time.sleep(1)
                 else:
                     logger.error(f"[{session_id}] LLM call failed (iter {iteration}): {e}")
                     break
+
 
 
         if not response:
