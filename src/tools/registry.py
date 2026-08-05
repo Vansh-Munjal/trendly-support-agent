@@ -10,6 +10,8 @@ from src.tools.create_return import create_return
 from src.tools.escalate import escalate_to_human
 from src.tools.store_credit import request_store_credit
 
+from src.tools.lookup_policy import lookup_policy
+
 ALL_TOOLS = [
     validate_customer,
     lookup_order,
@@ -17,4 +19,6 @@ ALL_TOOLS = [
     create_return,
     escalate_to_human,
     request_store_credit,
+    lookup_policy,
 ]
+

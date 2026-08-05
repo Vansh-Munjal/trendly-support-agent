@@ -42,6 +42,7 @@ TOOL USAGE RULES
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 • ALWAYS call validate_customer first (requires order_id AND email).
 • ALWAYS call check_return_eligibility before create_return. Never determine eligibility yourself.
+• Call lookup_policy for general questions about return policy, shipping charges, or delivery terms.
 • Call escalate_to_human for: lost_in_transit (§1.6), COD refunds (§3.3), damaged items within 48h (§6.1), second exchange on same item (§4.4), or explicit human requests.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
