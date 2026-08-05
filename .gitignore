@@ -1,0 +1,11 @@
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.env
+data/trendly.db
+.DS_Store
+*.egg-info/
+dist/
+build/
+.pytest_cache/
